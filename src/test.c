@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define STR_SIZE 33
+#define MAX_INT_BIT 31
 
 typedef struct {
     int bits[4];
@@ -16,21 +16,21 @@ void s21_int_to_decimal(int src, s21_decimal *dst);
 int s21_is_equal(s21_decimal num1, s21_decimal num2);
 int s21_is_not_equal(s21_decimal num1, s21_decimal num2);
 int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2);
+int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result);
 
 int main() {
-    int number1 = -12;
-    int number2 = 12;
+    int number1 = 196;
+    int number2 = 224;
+    char str[33] = {};
     s21_decimal example1;
     s21_decimal example2;
+    s21_decimal result;
     s21_int_to_decimal(number1, &example1);
     s21_int_to_decimal(number2, &example2);
-    printf("example1 = -%d\nexample2 = %d\n", example1.bits[0], example2.bits[0]);
-    int result = s21_is_equal(example1, example2);
-    printf("is equal - %d\n", result);
-    int result2 = s21_is_not_equal(example1, example2);
-    printf("is not equal - %d\n", result2);
-    int result3 = s21_is_less_or_equal(example1, example2);
-    printf("example1 <= example2 - %d\n", result3);
+    s21_add(example1, example2, &result);
+    s21_int_to_bit_str(result.bits[0], str);
+    if (s21_get_bit(result.bits[3], MAX_INT_BIT)) printf("-");
+    printf("%d\n", result.bits[0]);
     return 0;
 }
 
@@ -52,7 +52,7 @@ void s21_set_bit(int *num, int bit, int position) {
 void s21_int_to_decimal(int src, s21_decimal *dst) {
     dst->bits[0] = dst->bits[1] = dst->bits[2] = dst->bits[3] = 0;
     if( src < 0 ) {
-        s21_set_bit(&dst->bits[3], 1, 31);
+        s21_set_bit(&dst->bits[3], 1, MAX_INT_BIT);
         src *= -1;
     }
     dst->bits[0] = src;
@@ -76,9 +76,47 @@ int s21_is_not_equal(s21_decimal num1, s21_decimal num2) {
     return s21_is_equal(num1, num2) ? 0 : 1;
 }
 
+
+// не закончена
 int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2) {
     int result = 0;
     if (s21_is_equal(num1, num2)) result = 1;
-    if (s21_get_bit(num1.bits[3], 31) > s21_get_bit(num2.bits[3], 31)) result = 1;
+    if (s21_get_bit(num1.bits[3], MAX_INT_BIT) > s21_get_bit(num2.bits[3], MAX_INT_BIT)) result = 1;
     return result;
+}
+
+// integer positive
+int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result) {
+    int exit_flag = 0;
+    int mem = 0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 32; j++) {
+            int num1_bit = s21_get_bit(num1.bits[i], j);
+            int num2_bit = s21_get_bit(num2.bits[i], j);
+            if (num1_bit == 1 && num2_bit == 1) {
+                if (mem == 0) {
+                    s21_set_bit(&result->bits[i], 0, j);
+                    mem = 1;
+                } else {
+                    s21_set_bit(&result->bits[i], 1, j);
+                    mem = 1;
+                }
+            } else if ((num1_bit == 0 && num2_bit == 1) || (num1_bit == 1 && num2_bit == 0)) {
+                if (mem == 0) {
+                    s21_set_bit(&result->bits[i], 1, j);
+                } else {
+                    s21_set_bit(&result->bits[i], 0, j);
+                    mem = 0;
+                }
+            } else if (num1_bit == 0 && num2_bit == 0 ) {
+                if (i != 3) {
+                    if (mem == 1) {
+                        s21_set_bit(&result->bits[i], 1, j);
+                        mem = 0;
+                    }
+                }
+            }
+        }
+    }
+    return exit_flag;
 }
