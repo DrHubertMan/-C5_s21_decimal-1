@@ -19,8 +19,8 @@ int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2);
 int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result);
 
 int main() {
-    int number1 = 196;
-    int number2 = 224;
+    int number1 = -1;
+    int number2 = 12;
     char str[33] = {};
     s21_decimal example1;
     s21_decimal example2;
@@ -30,7 +30,7 @@ int main() {
     s21_add(example1, example2, &result);
     s21_int_to_bit_str(result.bits[0], str);
     if (s21_get_bit(result.bits[3], MAX_INT_BIT)) printf("-");
-    printf("%d\n", result.bits[0]);
+    printf("%d\n%d\n", result.bits[0], s21_get_bit(result.bits[3], MAX_INT_BIT));
     return 0;
 }
 
@@ -85,7 +85,8 @@ int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2) {
     return result;
 }
 
-// integer positive
+// integer positive negativ not work
+
 int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result) {
     int exit_flag = 0;
     int mem = 0;
@@ -115,6 +116,9 @@ int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result) {
                         mem = 0;
                     }
                 }
+            }
+            if (i == 3 && j == 31) {
+                if (num1_bit == 1 && num2_bit == 1) s21_set_bit(&result->bits[i], 1, j);
             }
         }
     }
