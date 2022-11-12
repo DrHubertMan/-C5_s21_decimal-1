@@ -50,6 +50,7 @@ int s21_get_bit(s21_decimal num) {
     for ()
     return src & (1<<num) ? 1 : 0;
 }       
+дщдщдщдщд
 
 void s21_int_to_bit_str(int number, char *str) {
     for (int i = MAX_INT_BIT, j = 0; i >= 0; i--, j++) {
