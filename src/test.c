@@ -10,7 +10,7 @@ typedef struct {
 
 // вспомогательные
 
-int s21_get_bit(int src, int num); // узнаем конкретный бит по позиции
+int s21_get_bit(s21_decmial num); // узнаем конкретный бит по позиции
 void s21_int_to_bit_str(int number, char *str); // перевод инта в двоичный формат и запись в строку
 void s21_set_bit(int *num, int bit, int position); // вкл/выкл бита в конкретной позиции
 void s21_invert_num(s21_decimal *num); // инвертировать число 
@@ -32,19 +32,22 @@ int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result);
 void s21_int_to_decimal(int src, s21_decimal *dst); 
 
 int main() {
-    int number1 = 9;
-    int number2 = 10;
+    int number1 = 2;
+    int number2 = 3;
     // char str[33] = {};
     s21_decimal example1, example2;
     s21_int_to_decimal(number1, &example1);
     s21_int_to_decimal(number2, &example2);
+    printf("%d\n", s21_get_position_last_bit(example1));
+    printf("%d\n", s21_get_position_last_bit(example2));
     printf("%d\n", s21_is_less(example1, example2));
     return 0;
 }
 
 // find out the bit
 
-int s21_get_bit(int src, int num) {
+int s21_get_bit(s21_decimal num) {
+    for ()
     return src & (1<<num) ? 1 : 0;
 }       
 
@@ -137,23 +140,30 @@ int s21_is_less(s21_decimal num1, s21_decimal num2) {
     int max1 = s21_get_position_last_bit(num1);
     int max2 = s21_get_position_last_bit(num2);
     if (sign1 > sign2) {
-        result = 1;
-    } else if (max1 < max2) {
-        result = 1;
+        result += 1;
+    } else if (sign1 && sign2) {
+        if (max1 > max2) result += 1;
+    } else if (!sign1 && !sign2) {
+        if (max1 < max2) result += 1;
     }
     return result;
 }
 
 int s21_get_position_last_bit(s21_decimal num) {
     int result = 95;
-    for (int i = 2; i >= 0; i ++) {
-        for (int j = 0; j <= MAX_INT_BIT; j++) {
-            s21_get_bit(num.bits[i], j) ? (result++) : (result);
+    int helper = 0;
+    for (int i = 2; i >= 0; i--) {
+        if (helper) break;
+        for (int j = MAX_INT_BIT; j >=0; j--) {
+            if (s21_get_bit(num.bits[i], j)) {
+                helper += 1;
+                break;
+            }
+            result--;
         }
     }
     return result;
 }
-
 
 // не закончена
 int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2) {
@@ -161,3 +171,6 @@ int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2) {
     if (s21_is_equal(num1, num2)) result = 1;
     return result;
 }
+
+011 3
+010 2
