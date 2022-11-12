@@ -3,6 +3,7 @@
 #include<string.h>
 
 #define MAX_INT_BIT 31
+#define MAX_DEC_BIT 95
 
 typedef struct {
     int bits[4];
@@ -10,7 +11,8 @@ typedef struct {
 
 // вспомогательные
 
-int s21_get_bit(s21_decmial num); // узнаем конкретный бит по позиции
+int s21_get_bit(int src, int num); // узнаем конкретный бит по позиции
+int s21_get_bit_dec(s21_decimal num, int pos); // узнаем конкретный бит по позиции во всем децимале
 void s21_int_to_bit_str(int number, char *str); // перевод инта в двоичный формат и запись в строку
 void s21_set_bit(int *num, int bit, int position); // вкл/выкл бита в конкретной позиции
 void s21_invert_num(s21_decimal *num); // инвертировать число 
@@ -32,8 +34,8 @@ int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result);
 void s21_int_to_decimal(int src, s21_decimal *dst); 
 
 int main() {
-    int number1 = 2;
-    int number2 = 3;
+    int number1 = 10;
+    int number2 = 15;
     // char str[33] = {};
     s21_decimal example1, example2;
     s21_int_to_decimal(number1, &example1);
@@ -46,11 +48,13 @@ int main() {
 
 // find out the bit
 
-int s21_get_bit(s21_decimal num) {
-    for ()
+int s21_get_bit(int src, int num) {
     return src & (1<<num) ? 1 : 0;
 }       
-дщдщдщдщд
+
+int s21_get_bit_dec(s21_decimal num, int pos) {
+    return num.bits[pos/32] & (1<< pos % 32) ? 1 : 0;
+}
 
 void s21_int_to_bit_str(int number, char *str) {
     for (int i = MAX_INT_BIT, j = 0; i >= 0; i--, j++) {
@@ -136,32 +140,21 @@ void s21_invert_num(s21_decimal *num) {
 
 int s21_is_less(s21_decimal num1, s21_decimal num2) {
     int result = 0;
-    int sign1 = s21_get_bit(num1.bits[3], MAX_INT_BIT);
-    int sign2 = s21_get_bit(num2.bits[3], MAX_INT_BIT);
-    int max1 = s21_get_position_last_bit(num1);
-    int max2 = s21_get_position_last_bit(num2);
+    int sign1 = s21_get_bit_dec(num1, MAX_DEC_BIT);
+    int sign2 = s21_get_bit_dec(num2, MAX_DEC_BIT);
     if (sign1 > sign2) {
         result += 1;
-    } else if (sign1 && sign2) {
-        if (max1 > max2) result += 1;
-    } else if (!sign1 && !sign2) {
-        if (max1 < max2) result += 1;
     }
     return result;
 }
 
 int s21_get_position_last_bit(s21_decimal num) {
-    int result = 95;
-    int helper = 0;
-    for (int i = 2; i >= 0; i--) {
-        if (helper) break;
-        for (int j = MAX_INT_BIT; j >=0; j--) {
-            if (s21_get_bit(num.bits[i], j)) {
-                helper += 1;
-                break;
-            }
-            result--;
+    int result = 63;
+    for (int i = 63; i >= 0; i--) {
+        if(s21_get_bit_dec(num, i)) {
+            break;
         }
+        result--;
     }
     return result;
 }
@@ -173,5 +166,3 @@ int s21_is_less_or_equal(s21_decimal num1, s21_decimal num2) {
     return result;
 }
 
-011 3
-010 2
