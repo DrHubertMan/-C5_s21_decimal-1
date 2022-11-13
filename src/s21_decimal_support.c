@@ -89,3 +89,14 @@ int s21_add_diff(s21_decimal *buf1, s21_decimal *buf2, s21_decimal *result) {
     }
     return exit_flag;
 }
+
+void s21_shift_dec(s21_decimal *num, int shift) {
+    s21_decimal buf = *num;
+    for (int i = 0; i < 95; i++){
+        int bit = s21_get_bit_dec(buf, i);
+        s21_set_bit_dec(num, bit, i+shift);
+    }
+    for (int j = 0; j <= shift; j++) {
+        s21_set_bit_dec(num, 0, j);
+    }
+}
