@@ -10,3 +10,12 @@ int s21_int_to_decimal(int src, s21_decimal *dst) {
     dst->bits[0] = src;
     return result;
 }
+
+int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+    int result = 0;
+    *dst = 0;
+    int sign_dec = s21_get_bit_dec(src, MAX_DEC_BIT);
+    *dst = src.bits[0];
+    if (sign_dec) *dst *= -1;
+    return result;
+}
