@@ -36,19 +36,10 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     int exit_flag = 0;
 
-    s21_decimal buf1 = value_1;
     s21_decimal buf2 = value_2;
-    
-    result->bits[0] = result->bits[1] = result->bits[2] = result->bits[3] = 0;
 
-    int sign1 = s21_get_bit_dec(buf1, MAX_DEC_BIT);
-    int sign2 = s21_get_bit_dec(buf2, MAX_DEC_BIT);
+    s21_negate(buf2, &buf2);
+    s21_add(value_1, buf2, result);
 
-    if (!sign1 && !sign2) {
-        s21_negate(buf2, &buf2);
-        s21_add(buf1, buf2, result);
-    } else if (sign1 && !sign2) {
-        
-    }
     return exit_flag;
 }
