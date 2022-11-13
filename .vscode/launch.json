@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug this shit",
+            "stopOnEntry": false,
+            "program": "${workspaceFolder}/src/test.out",
+            "arg": [3, 5],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
