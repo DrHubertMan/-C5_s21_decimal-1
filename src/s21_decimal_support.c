@@ -35,3 +35,57 @@ int s21_get_position_last_bit(s21_decimal num) {
     }
     return result;
 }
+
+int s21_decimal_add(s21_decimal buf1, s21_decimal buf2, s21_decimal *result) {
+    int exit_flag = 0;
+    int mem = 0;
+    for (int j = 0; j <= 95; j++) {
+        int num1_bit = s21_get_bit_dec(buf1, j);
+        int num2_bit = s21_get_bit_dec(buf2, j);
+        if (num1_bit && num2_bit) {
+            if (!mem) {
+                s21_set_bit_dec(result, 0, j);
+                mem = 1;
+                continue;
+            } else if (mem) {
+                s21_set_bit_dec(result, 1, j);
+                mem = 1;
+                continue;
+            }
+        } else if ((num1_bit && !num2_bit) || (!num1_bit && num2_bit)) {
+            if (!mem) {
+                s21_set_bit_dec(result, 1, j);
+                continue;
+            } else if (mem) {
+                s21_set_bit_dec(result, 0, j);
+                mem = 1;
+                continue;
+            }
+        } else if (!num1_bit && !num2_bit) {
+            if (mem) {
+                s21_set_bit_dec(result, 1, j);
+                mem = 0;
+                continue;
+            }
+        }
+    }
+    return exit_flag;
+}
+
+int s21_add_diff(s21_decimal *buf1, s21_decimal *buf2, s21_decimal *result) {
+    int exit_flag = 0;
+
+    s21_decimal one;
+    int one_dec = 1;
+    s21_int_to_decimal(one_dec, &one);
+    
+    s21_invert_num(buf1);
+    int proof = s21_is_less(*buf1, *buf2); // proof результат  сравнения "по модулю"
+    if (proof) {
+        s21_decimal_add(*result, one, result);
+    } else if (!proof) {
+        s21_invert_num(result);
+        s21_set_bit_dec(result, 1, MAX_DEC_BIT);
+    }
+    return exit_flag;
+}

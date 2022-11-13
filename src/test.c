@@ -2,7 +2,8 @@
 
 int main() {
     int number1 = 3;
-    int number2 = 5;
+    int number2 = -5;
+    // scanf("%d %d", &number1, &number2);
     s21_decimal example1, example2, result;
     s21_int_to_decimal(number1, &example1);
     s21_int_to_decimal(number2, &example2);

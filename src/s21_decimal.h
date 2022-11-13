@@ -19,6 +19,8 @@ void s21_set_bit(int *num, int bit, int position); // вкл/выкл бита �
 void s21_set_bit_dec(s21_decimal *num, int bit, int position);
 void s21_invert_num(s21_decimal *num); // инвертировать число 
 int s21_get_position_last_bit(s21_decimal num); // узнать последний включенный бит в числе
+int s21_decimal_add(s21_decimal buf1, s21_decimal buf2, s21_decimal *result); // для сложения 
+int s21_add_diff(s21_decimal *buf1, s21_decimal *buf2, s21_decimal *result); // ciganskye fokusi
 //________________________________________________________________________________________________
 
 // сравнение
