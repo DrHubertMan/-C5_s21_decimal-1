@@ -12,6 +12,11 @@ void s21_set_bit(int *num, int bit, int position) {
     (bit == 1) ? (*num |= (1 << position)) : (*num &= ~( 1 << position ));
 }
 
+void s21_set_bit_dec(s21_decimal *num, int bit, int position) {
+    (bit == 1) ? (num->bits[position/32] |= (1 << position % 32)) 
+                : (num->bits[position/32] &= ~( 1 << position % 32));
+}
+
 void s21_invert_num(s21_decimal *num) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j <= MAX_INT_BIT; j++) {

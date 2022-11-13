@@ -27,34 +27,39 @@ int s21_add(s21_decimal num1, s21_decimal num2, s21_decimal *result) {
         s21_invert_num(&buf2);
     }
 
-    int mem = 0;
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j <= MAX_INT_BIT; j++) {
-            int num1_bit = s21_get_bit(buf1.bits[i], j);
-            int num2_bit = s21_get_bit(buf2.bits[i], j);
-            if (num1_bit == 1 && num2_bit == 1) {
-                if (mem == 0) {
-                    s21_set_bit(&result->bits[i], 0, j);
-                    mem = 1;
-                } else {
-                    s21_set_bit(&result->bits[i], 1, j);
-                    mem = 1;
-                }
-            } else if ((num1_bit == 0 && num2_bit == 1) || (num1_bit == 1 && num2_bit == 0)) {
-                if (mem == 0) {
-                    s21_set_bit(&result->bits[i], 1, j);
-                } else {
-                    s21_set_bit(&result->bits[i], 0, j);
-                    mem = 0;
-                }
-            } else if (num1_bit == 0 && num2_bit == 0 ) {
-                if (mem == 1) {
-                    s21_set_bit(&result->bits[i], 1, j);
-                    mem = 0;
-                }
+    int mem = 0; // 
+
+    for (int j = 0; j <= 95; j++) {
+        int num1_bit = s21_get_bit_dec(buf1, j);
+        int num2_bit = s21_get_bit_dec(buf2, j);
+        if (num1_bit && num2_bit) {
+            if (!mem) {
+                s21_set_bit_dec(result, 0, j);
+                mem = 1;
+                continue;
+            } else if (mem) {
+                s21_set_bit_dec(result, 1, j);
+                mem = 1;
+                continue;
+            }
+        } else if ((num1_bit && !num2_bit) || (!num1_bit && num2_bit)) {
+            if (!mem) {
+                s21_set_bit_dec(result, 1, j);
+                continue;
+            } else if (mem) {
+                s21_set_bit_dec(result, 0, j);
+                mem = 1;
+                continue;
+            }
+        } else if (!num1_bit && !num2_bit) {
+            if (mem) {
+                s21_set_bit_dec(result, 1, j);
+                mem = 0;
+                continue;
             }
         }
     }
+
 
     
     //if (sign1 && !sign2) {

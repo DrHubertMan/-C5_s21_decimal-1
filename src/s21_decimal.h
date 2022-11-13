@@ -16,6 +16,7 @@ typedef struct {
 int s21_get_bit(int src, int num); // узнаем конкретный бит по позиции
 int s21_get_bit_dec(s21_decimal num, int pos); // узнаем конкретный бит по позиции во всем децимале
 void s21_set_bit(int *num, int bit, int position); // вкл/выкл бита в конкретной позиции
+void s21_set_bit_dec(s21_decimal *num, int bit, int position);
 void s21_invert_num(s21_decimal *num); // инвертировать число 
 int s21_get_position_last_bit(s21_decimal num); // узнать последний включенный бит в числе
 //________________________________________________________________________________________________
