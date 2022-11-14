@@ -63,12 +63,55 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     }
   }
 
-  if (sign1 && sign2) {
+  if (sign1 == sign2) {
     s21_set_bit_dec(result, 0, MAX_DEC_BIT);
-  } else if (!sign1 && !sign2) {
-    s21_set_bit_dec(result, 0, MAX_DEC_BIT);
-  } else if ((sign1 && !sign2) || (!sign1 && sign2))
+  } else if (sign1 != sign2) {
     s21_set_bit_dec(result, 1, MAX_DEC_BIT);
-    
+  }
+
+  return exit_flag;
+}
+
+int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+  int exit_flag = 0;
+
+  s21_decimal buf1 = value_1;
+  s21_decimal buf2 = value_2;
+  s21_decimal zero;
+
+  zero.bits[0] = zero.bits[1] = zero.bits[2] = zero.bits[3] = 0;
+  result->bits[0] = result->bits[1] = result->bits[2] = result->bits[3] = 0;
+
+  int sign1 = s21_get_bit_dec(buf1, MAX_DEC_BIT);
+  int sign2 = s21_get_bit_dec(buf2, MAX_DEC_BIT);
+
+  if (sign1 && sign2) {
+    s21_negate(buf1, &buf1);
+    s21_negate(buf2, &buf2);
+  } else if (sign1 && !sign2) {
+    s21_negate(buf1, &buf1);
+  } else if (!sign1 && sign2) {
+    s21_negate(buf2, &buf2);
+  } 
+
+  s21_decimal one;
+  int one_dec = 1;
+  s21_int_to_decimal(one_dec, &one);
+
+  if (s21_is_less(buf1, buf2)) {
+    *result = zero;
+  } else {
+    while (s21_is_greater_or_equal(buf1, zero)) {
+      s21_sub(buf1, buf2, &buf1);
+      s21_add(*result, one, result);
+    }
+  }
+
+  if (sign1 == sign2) {
+    s21_set_bit_dec(result, 0, MAX_DEC_BIT);
+  } else if (sign1 != sign2) {
+    s21_set_bit_dec(result, 1, MAX_DEC_BIT);
+  }
+
   return exit_flag;
 }
