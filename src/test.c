@@ -1,8 +1,8 @@
 #include "s21_decimal.h"
 
 int main() {
-  int number1 = 26;
-  int number2 = 13;
+  int number1 = 5;
+  int number2 = 2;
   // scanf("%d %d", &number1, &number2);
   s21_decimal example1, example2, result;
   s21_int_to_decimal(number1, &example1);
