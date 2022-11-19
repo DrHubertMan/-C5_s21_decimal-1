@@ -96,7 +96,19 @@ void s21_shift_dec(s21_decimal *num, int shift) {
     int bit = s21_get_bit_dec(buf, i);
     s21_set_bit_dec(num, bit, i + shift);
   }
-  for (int j = 0; j <= shift; j++) {
+  for (int j = 0; j < shift; j++) {
     s21_set_bit_dec(num, 0, j);
   }
+}
+
+// catch float exp
+int s21_get_float_exp(float *src) {
+  return ((*(int *)src & ~0x80000000) >> 23) - 127;
+}
+
+int s21_get_float_sign(float *src) { return *(int *)src >> 31; }
+
+// catch decimal scale
+int s21_get_scale(const s21_decimal *varPtr) {
+  return (char)(varPtr->bits[3] >> 16);
 }

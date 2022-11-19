@@ -7,7 +7,7 @@
             "name": "Debug this shit",
             "stopOnEntry": false,
             "program": "${workspaceFolder}/src/test.out",
-            "arg": [3, 5],
+            "arg": [10, 1],
             "cwd": "${workspaceFolder}"
         }
     ]

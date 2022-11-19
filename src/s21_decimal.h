@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define MAX_INT_BIT 31
 #define MAX_DEC_BIT 127
@@ -10,6 +11,13 @@
 typedef struct {
   int bits[4];
 } s21_decimal;
+
+//struct for float bits value
+
+typedef union {
+  int ui;
+  float fl;
+} floatbits;
 
 // вспомогательные
 //_________________________________________________________________________________________________
@@ -28,6 +36,9 @@ int s21_decimal_add(s21_decimal buf1, s21_decimal buf2,
 int s21_add_diff(s21_decimal *buf1, s21_decimal *buf2,
                  s21_decimal *result);           // ciganskye fokusi
 void s21_shift_dec(s21_decimal *num, int shift); // сдвиг битов влево
+int s21_get_float_exp(float *src);
+int s21_get_float_sign(float *src);
+int s21_get_scale(const s21_decimal *varPtr);
 //________________________________________________________________________________________________
 
 // сравнение
@@ -48,14 +59,21 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
 //________________________________________________________________________________________________
 
+// арифметика преобразования
+//________________________________________________________________________________________________
+int s21_floor(s21_decimal value, s21_decimal *result);
+int s21_round(s21_decimal value, s21_decimal *result);
+int s21_truncate(s21_decimal value, s21_decimal *result);
+int s21_negate(s21_decimal value, s21_decimal *result);
+//________________________________________________________________________________________________
+
+
 // преобразователи
 //________________________________________________________________________________________________
 int s21_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_decimal_to_int(s21_decimal src, int *dst);
+int s21_float_to_decimal(float src, s21_decimal *dst);
+int s21_from_decimal_to_float(s21_decimal src, float *dst);
 //________________________________________________________________________________________________
 
-// Another functions
-//________________________________________________________________________________________________
-int s21_negate(s21_decimal value, s21_decimal *result);
-//________________________________________________________________________________________________
 #endif // SRC_S21_DECIMAL_H_
