@@ -36,6 +36,8 @@ int s21_get_position_last_bit(s21_decimal num) {
 }
 
 int s21_decimal_add(s21_decimal buf1, s21_decimal buf2, s21_decimal *result) {
+  
+  
   int exit_flag = 0;
   int mem = 0;
   for (int j = 0; j <= 95; j++) {
@@ -111,4 +113,13 @@ int s21_get_float_sign(float *src) { return *(int *)src >> 31; }
 // catch decimal scale
 int s21_get_scale(const s21_decimal *varPtr) {
   return (char)(varPtr->bits[3] >> 16);
+}
+
+int s21_is_zero(s21_decimal value) {
+  int result = 1;
+  for (int i = 0; i < 95; i++) {
+    if (s21_get_bit_dec(value, i)) 
+    result = 0;
+  }
+  return result;
 }

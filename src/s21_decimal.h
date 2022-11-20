@@ -8,6 +8,17 @@
 #define MAX_INT_BIT 31
 #define MAX_DEC_BIT 127
 
+/*
+  return 1 if NaN and 0 if not
+*/
+#define S21_IS_NAN(x) __builtin_isnan(x)  // this (!(x >= 0) && !(x < 0))
+/*
+  return 1 if inf and -1 if -inf and 0 if finite
+*/
+#define S21_IS_INF(x) __builtin_isinf(x)  // ((x == S21_INF) || (x == -S21_INF))
+
+
+
 typedef struct {
   int bits[4];
 } s21_decimal;
@@ -39,6 +50,7 @@ void s21_shift_dec(s21_decimal *num, int shift); // сдвиг битов вле
 int s21_get_float_exp(float *src);
 int s21_get_float_sign(float *src);
 int s21_get_scale(const s21_decimal *varPtr);
+int s21_is_zero(s21_decimal value);
 //________________________________________________________________________________________________
 
 // сравнение

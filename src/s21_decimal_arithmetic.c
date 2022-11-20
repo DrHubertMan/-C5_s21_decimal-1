@@ -131,29 +131,19 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
                   buf2)) { // тк деление без остатка частное будет равно нулю
     *result = zero;
   } else {                               // делим
-    while (s21_is_greater(buf1, zero)) { // пока делитель больше нуля
-      /*
-      ВАЖНО понимать разницу между tmp2 и buf2 в каждой итерации!!!
-      ниже сдвигаю переменную равную делителю на 1 влево,
-      чтобы проверить не будет ли она больше делителя после сдвига, если
-      делимое все еще больше, сдвигаю фактический делитель и записываю значние
-      сдвига
-      */
+    while (s21_is_greater(buf1, zero) || s21_is_zero(buf1)) { // пока делитель больше нуля
       s21_shift_dec(&tmp2, 1);
-      if (s21_is_greater_or_equal(buf1, tmp2) && s21_is_greater(tmp2, zero)) {
-        s21_shift_dec(&buf2, 1);
+      if (s21_is_greater_or_equal(buf1, tmp2)) {
+        buf2 = tmp2;
         shift++;
-        /*
-        если наша tmp2 стала больше делителя, то мы берем значение buf2
-        которое сдвигали последний раз в прошлой итерации
-        */
       } else {
-        s21_sub(buf1, buf2, &buf1); // из делимого вычитаем buf2
-        s21_set_bit_dec(result, 1, shift); // в результате включаем бит на
-                                           // позиции равной величине сдвига
-        buf2 = value_2; // возвращаем исходное значение делителя
-        tmp2 = buf2; // аналогично нашей проверочной переменной
-        shift = 0; // зануляем сдвиг
+        s21_sub(buf1, buf2, &buf1);
+        if (s21_is_greater_or_equal(buf1, zero) || s21_is_zero(buf1)) {
+          s21_set_bit_dec(result, 1, shift);
+        }
+        buf2 = value_2;
+        tmp2 = buf2;
+        shift = 0;
       }
     }
   }
