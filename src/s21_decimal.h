@@ -51,6 +51,8 @@ int s21_get_float_exp(float *src);
 int s21_get_float_sign(float *src);
 int s21_get_scale(const s21_decimal *varPtr);
 int s21_is_zero(s21_decimal value);
+int s21_is_inf(s21_decimal value);
+void s21_set_inf(s21_decimal *value);
 //________________________________________________________________________________________________
 
 // сравнение

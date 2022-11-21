@@ -24,7 +24,7 @@ int s21_is_less(s21_decimal num1, s21_decimal num2) {
   if (sign1 > sign2) {
     result = 1;
   } else if (sign1 && sign2) {
-    for (int i = 63; i >= 0; i--) {
+    for (int i = 95; i >= 0; i--) {
       if (s21_get_bit_dec(num1, i) < s21_get_bit_dec(num2, i)) {
         break;
       } else if (s21_get_bit_dec(num1, i) > s21_get_bit_dec(num2, i)) {
@@ -33,7 +33,7 @@ int s21_is_less(s21_decimal num1, s21_decimal num2) {
       }
     }
   } else if (!sign1 && !sign2) {
-    for (int i = 63; i >= 0; i--) {
+    for (int i = 95; i >= 0; i--) {
       if (s21_get_bit_dec(num1, i) > s21_get_bit_dec(num2, i)) {
         break;
       } else if (s21_get_bit_dec(num1, i) < s21_get_bit_dec(num2, i)) {

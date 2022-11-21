@@ -1,9 +1,8 @@
 #include "s21_decimal.h"
 
 int main() {
-  /*
-  int number1 = 78;
-  int number2 = 33;
+  int number1 = -10;
+  int number2 = 1;
   // scanf("%d %d", &number1, &number2);
   s21_decimal example1, example2, result;
   s21_int_to_decimal(number1, &example1);
@@ -18,13 +17,14 @@ int main() {
   }
   printf(" var 2\n_____________________________________________\n");
 
-  s21_mod(example1, example2, &result);
+  s21_add(example1, example2, &result);
   
   for (int i = MAX_DEC_BIT; i >= 0; i--) {
     printf("%d", s21_get_bit_dec(result, i));
   }
   printf("\n");
-  */
+  return 0;
+  /*
   float a = -0.02;
   float b = 2;
   int exp_a = s21_get_float_exp(&a);
@@ -52,5 +52,6 @@ int main() {
     printf("%d", s21_get_bit(exp_b, i));
   }
   printf(" exp_a\n_______________\n");
-  return 0; 
+  return 0;
+  */
 }

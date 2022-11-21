@@ -25,8 +25,8 @@ void s21_invert_num(s21_decimal *num) {
 }
 
 int s21_get_position_last_bit(s21_decimal num) {
-  int result = 63;
-  for (int i = 63; i >= 0; i--) {
+  int result = 95;
+  for (int i = 95; i >= 0; i--) {
     if (s21_get_bit_dec(num, i)) {
       break;
     }
@@ -36,8 +36,6 @@ int s21_get_position_last_bit(s21_decimal num) {
 }
 
 int s21_decimal_add(s21_decimal buf1, s21_decimal buf2, s21_decimal *result) {
-  
-  
   int exit_flag = 0;
   int mem = 0;
   for (int j = 0; j <= 95; j++) {
@@ -118,8 +116,32 @@ int s21_get_scale(const s21_decimal *varPtr) {
 int s21_is_zero(s21_decimal value) {
   int result = 1;
   for (int i = 0; i < 95; i++) {
-    if (s21_get_bit_dec(value, i)) 
-    result = 0;
+    if (s21_get_bit_dec(value, i))
+      result = 0;
   }
   return result;
 }
+
+// int s21_is_inf(s21_decimal value) {
+//   int result = 0;
+//   int scale = 1;
+//   int sign = s21_get_bit_dec(value, MAX_DEC_BIT);
+//   int zero_mantis = s21_is_zero(value);
+//   for (int i = 16; i > 24; i++) {
+//     printf("%d\n", s21_get_bit(value.bits[3], i));
+//     scale = 0;
+//   }
+// 
+//   if (scale && zero_mantis && !sign) {
+//     result = 1; // +inf
+//   } else if (scale && zero_mantis && sign) {
+//     result = 2; // -inf
+//   }
+//   return result;
+// }
+// 
+// void s21_set_inf(s21_decimal *value) {
+//   value->bits[0] = value->bits[1] = value->bits[2] = value->bits[3] = 0;
+// }
+bits 3 bits 2  bits 1  bits 0
+0000   0000    0000    1010  // +10
