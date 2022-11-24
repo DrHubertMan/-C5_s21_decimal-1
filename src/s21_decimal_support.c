@@ -122,6 +122,21 @@ int s21_is_zero(s21_decimal value) {
   return result;
 }
 
+int s21_is_two_zero(s21_decimal value1, s21_decimal value2) {
+  int result = 0;
+  if (s21_is_zero(value1) && s21_is_zero(value2)) {
+    result = 1;
+  }
+  return result;
+}
+
+void s21_mul_ten(s21_decimal *num) {
+  int ten_int = 10;
+  s21_decimal ten;
+  s21_int_to_decimal(ten_int, &ten);
+  s21_mul(*num, ten, num);
+}
+
 // int s21_is_inf(s21_decimal value) {
 //   int result = 0;
 //   int scale = 1;
@@ -143,5 +158,3 @@ int s21_is_zero(s21_decimal value) {
 // void s21_set_inf(s21_decimal *value) {
 //   value->bits[0] = value->bits[1] = value->bits[2] = value->bits[3] = 0;
 // }
-bits 3 bits 2  bits 1  bits 0
-0000   0000    0000    1010  // +10

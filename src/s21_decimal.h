@@ -1,9 +1,9 @@
 #ifndef SRC_S21_DECIMAL_H_
 #define SRC_S21_DECIMAL_H_
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define MAX_INT_BIT 31
 #define MAX_DEC_BIT 127
@@ -11,19 +11,17 @@
 /*
   return 1 if NaN and 0 if not
 */
-#define S21_IS_NAN(x) __builtin_isnan(x)  // this (!(x >= 0) && !(x < 0))
+#define S21_IS_NAN(x) __builtin_isnan(x) // this (!(x >= 0) && !(x < 0))
 /*
   return 1 if inf and -1 if -inf and 0 if finite
 */
-#define S21_IS_INF(x) __builtin_isinf(x)  // ((x == S21_INF) || (x == -S21_INF))
-
-
+#define S21_IS_INF(x) __builtin_isinf(x) // ((x == S21_INF) || (x == -S21_INF))
 
 typedef struct {
   int bits[4];
 } s21_decimal;
 
-//struct for float bits value
+// struct for float bits value
 
 typedef union {
   int ui;
@@ -51,8 +49,10 @@ int s21_get_float_exp(float *src);
 int s21_get_float_sign(float *src);
 int s21_get_scale(const s21_decimal *varPtr);
 int s21_is_zero(s21_decimal value);
-int s21_is_inf(s21_decimal value);
-void s21_set_inf(s21_decimal *value);
+// int s21_is_inf(s21_decimal value);
+// void s21_set_inf(s21_decimal *value);
+int s21_is_two_zero(s21_decimal value1, s21_decimal value2);
+void s21_mul_ten(s21_decimal *num);
 //________________________________________________________________________________________________
 
 // сравнение
@@ -81,7 +81,6 @@ int s21_round(s21_decimal value, s21_decimal *result);
 int s21_truncate(s21_decimal value, s21_decimal *result);
 int s21_negate(s21_decimal value, s21_decimal *result);
 //________________________________________________________________________________________________
-
 
 // преобразователи
 //________________________________________________________________________________________________

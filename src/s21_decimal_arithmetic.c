@@ -3,46 +3,41 @@
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   int exit_flag = 0;
 
-  /*
-  создаем переменные - копии наших значений
-  */
   s21_decimal buf1 = value_1;
   s21_decimal buf2 = value_2;
+  // int scale1 = s21_get_scale(&buf1);
+  // int scale2 = s21_get_scale(&buf2);
+  // int scale_result = 0;
+  // int scale_differ;
+  // 
+  // if (scale1 > scale2) {
+  //   scale_result = scale1;
+  //   scale_differ = scale1 - scale2;
+  //   
+  // }
 
-  /*
-  зануляем результат, чтобы не было мусора
-  */
   result->bits[0] = result->bits[1] = result->bits[2] = result->bits[3] = 0;
 
-  /*
-  получаем знаки наших переменных
-  */
   int sign1 = s21_get_bit_dec(buf1, MAX_DEC_BIT);
   int sign2 = s21_get_bit_dec(buf2, MAX_DEC_BIT);
 
-  if (sign1 && sign2) { // если оба знака отрицательные
-    s21_set_bit_dec(result, 1,
-                    MAX_DEC_BIT); // устанавливаем в результате знак минус
-    s21_negate(buf1, &buf1); // умножаем переменную на -1
-    s21_negate(buf2, &buf2); // умножаем переменную на -1
-  } else if (sign1 && !sign2) { // если первое слогаемое отриц
-    s21_set_bit_dec(&buf1, 0, MAX_DEC_BIT); // меняем знак на +
-    s21_invert_num(
-        &buf1); // инвертируем число, для сложения разнознаковых слогаемых
-  } else if (sign2 && !sign1) { // если второе слогаемое отриц
-    s21_set_bit_dec(&buf2, 0, MAX_DEC_BIT); // меняем знак на +
-    s21_invert_num(
-        &buf2); // инвертируем число, для сложения разнознаковых слогаемых
+  if (sign1 && sign2) {
+    s21_set_bit_dec(result, 1, MAX_DEC_BIT);
+    s21_negate(buf1, &buf1);
+  } else if (sign1 && !sign2) {
+    s21_set_bit_dec(&buf1, 0, MAX_DEC_BIT);
+    s21_invert_num(&buf1);
+  } else if (sign2 && !sign1) {
+    s21_set_bit_dec(&buf2, 0, MAX_DEC_BIT);
+    s21_invert_num(&buf2);
   }
 
-  s21_decimal_add(buf1, buf2, result); // складываем
+  s21_decimal_add(buf1, buf2, result);
 
-  if (sign1 && !sign2) { // если первое отриц
-    s21_add_diff(&buf1, &buf2,
-                 result); // вызываем доп функцию, важна очередность слогаемых
-  } else if (!sign1 && sign2) { // если второе отриц
-    s21_add_diff(&buf2, &buf1,
-                 result); // вызываем доп функцию, важна очередность слогаемых
+  if (sign1 && !sign2) {
+    s21_add_diff(&buf1, &buf2, result);
+  } else if (!sign1 && sign2) {
+    s21_add_diff(&buf2, &buf1, result);
   }
   return exit_flag;
 }
@@ -52,9 +47,8 @@ int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 
   s21_decimal buf2 = value_2;
 
-  s21_negate(buf2, &buf2); // умножаем на -1 второе знач
-  s21_add(value_1, buf2, result); // складываем по правилам сложения
-
+  s21_negate(buf2, &buf2);
+  s21_add(value_1, buf2, result);
   return exit_flag;
 }
 
@@ -130,8 +124,9 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   if (s21_is_less(buf1,
                   buf2)) { // тк деление без остатка частное будет равно нулю
     *result = zero;
-  } else {                               // делим
-    while (s21_is_greater(buf1, zero) || s21_is_zero(buf1)) { // пока делитель больше нуля
+  } else { // делим
+    while (s21_is_greater(buf1, zero) ||
+           s21_is_zero(buf1)) { // пока делитель больше нуля
       s21_shift_dec(&tmp2, 1);
       if (s21_is_greater_or_equal(buf1, tmp2)) {
         buf2 = tmp2;
