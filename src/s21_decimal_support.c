@@ -130,11 +130,18 @@ int s21_is_two_zero(s21_decimal value1, s21_decimal value2) {
   return result;
 }
 
-void s21_mul_ten(s21_decimal *num) {
-  int ten_int = 10;
-  s21_decimal ten;
-  s21_int_to_decimal(ten_int, &ten);
-  s21_mul(*num, ten, num);
+void s21_mul_ten(s21_decimal *num, int count) {
+  int sign = s21_get_bit_dec(*num, MAX_DEC_BIT);
+  int counter = count;
+  num->bits[3] = 0;
+  for (int i = 0; i < counter; i++) {
+    s21_decimal tmp1 = *num;
+    s21_decimal tmp2 = *num;
+    s21_shift_dec(&tmp1, 1);
+    s21_shift_dec(&tmp2, 3);
+    s21_add(tmp1, tmp2, num);
+  }
+  s21_set_bit_dec(num, sign, MAX_DEC_BIT);
 }
 
 // int s21_is_inf(s21_decimal value) {
@@ -146,7 +153,7 @@ void s21_mul_ten(s21_decimal *num) {
 //     printf("%d\n", s21_get_bit(value.bits[3], i));
 //     scale = 0;
 //   }
-// 
+//
 //   if (scale && zero_mantis && !sign) {
 //     result = 1; // +inf
 //   } else if (scale && zero_mantis && sign) {
@@ -154,7 +161,7 @@ void s21_mul_ten(s21_decimal *num) {
 //   }
 //   return result;
 // }
-// 
+//
 // void s21_set_inf(s21_decimal *value) {
 //   value->bits[0] = value->bits[1] = value->bits[2] = value->bits[3] = 0;
 // }
