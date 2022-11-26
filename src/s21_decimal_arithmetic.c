@@ -62,11 +62,15 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   int exit_flag = 0;
 
   s21_decimal buf1 = value_1;
+  s21_decimal tmp1 = value_1;
+  s21_decimal tmp2 = value_2;
 
   result->bits[0] = result->bits[1] = result->bits[2] = result->bits[3] = 0;
 
   int sign1 = s21_get_bit_dec(value_1, MAX_DEC_BIT);
   int sign2 = s21_get_bit_dec(value_2, MAX_DEC_BIT);
+
+  int scale_result = s21_get_scale(&tmp1) + s21_get_scale(&tmp2);
 
   if (s21_is_greater(value_2,
                      value_1)) { // если второе значение больше первого, меняем
@@ -91,7 +95,8 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
       s21_set_bit_dec(result, 1, MAX_DEC_BIT);
     }
   }
-
+  s21_set_scale(result, scale_result);
+  
   return exit_flag;
 }
 
