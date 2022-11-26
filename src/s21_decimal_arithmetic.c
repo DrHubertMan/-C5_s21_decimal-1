@@ -5,16 +5,20 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
 
   s21_decimal buf1 = value_1;
   s21_decimal buf2 = value_2;
-  // int scale1 = s21_get_scale(&buf1);
-  // int scale2 = s21_get_scale(&buf2);
-  // int scale_result = 0;
-  // int scale_differ;
-  // 
-  // if (scale1 > scale2) {
-  //   scale_result = scale1;
-  //   scale_differ = scale1 - scale2;
-  //   
-  // }
+
+  int scale1 = s21_get_scale(&buf1);
+  int scale2 = s21_get_scale(&buf2);
+  int result_scale = 0;
+
+  if (scale1 > scale2) {
+    int scale_dif = scale1 - scale2;
+    result_scale = scale1;
+    s21_mul_ten(&buf2, scale_dif);
+  } else if (scale2 > scale1) {
+    int scale_dif = scale2 - scale1;
+    result_scale = scale2;
+    s21_mul_ten(&buf1, scale_dif);
+  }
 
   result->bits[0] = result->bits[1] = result->bits[2] = result->bits[3] = 0;
 
@@ -39,6 +43,8 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   } else if (!sign1 && sign2) {
     s21_add_diff(&buf2, &buf1, result);
   }
+  s21_set_scale(result, result_scale);
+
   return exit_flag;
 }
 

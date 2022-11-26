@@ -53,6 +53,8 @@ int s21_is_zero(s21_decimal value);
 // void s21_set_inf(s21_decimal *value);
 int s21_is_two_zero(s21_decimal value1, s21_decimal value2);
 void s21_mul_ten(s21_decimal *num, int count);
+void s21_set_scale(s21_decimal *value, int exp);
+
 //________________________________________________________________________________________________
 
 // сравнение

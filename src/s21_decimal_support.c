@@ -144,6 +144,11 @@ void s21_mul_ten(s21_decimal *num, int count) {
   s21_set_bit_dec(num, sign, MAX_DEC_BIT);
 }
 
+void s21_set_scale(s21_decimal *value, int exp) {
+  for (int i = 16; i < 24; i++) {
+    s21_set_bit(&value->bits[3], s21_get_bit(exp, i - 16), i);
+  }
+}
 // int s21_is_inf(s21_decimal value) {
 //   int result = 0;
 //   int scale = 1;
