@@ -1,8 +1,8 @@
 #include "s21_decimal.h"
 
 int main() {
-  float a = 0.3;
-  float b = -0.02;
+  float a = 5;
+  float b = 2;
   s21_decimal example1, example2, result;
   s21_float_to_decimal(a, &example1);
   s21_float_to_decimal(b, &example2);
@@ -17,7 +17,7 @@ int main() {
   }
   printf(" var 2\n_____________________________________________\n");
 
-  s21_mul(example1, example2, &result);
+  s21_div(example1, example2, &result);
   for (int i = MAX_DEC_BIT; i >= 0; i--) {
     printf("%d", s21_get_bit_dec(result, i));
   }

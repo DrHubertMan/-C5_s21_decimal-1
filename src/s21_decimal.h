@@ -21,6 +21,10 @@ typedef struct {
   int bits[4];
 } s21_decimal;
 
+typedef struct {
+  int bits[10];
+} s21_long_decimal;
+
 // struct for float bits value
 
 typedef union {
